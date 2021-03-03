@@ -1,0 +1,6 @@
+-std=c++17
+-g
+-fsanitize=address
+-isystem/usr/local/include
+-L/usr/local/lib
+-lfmt
