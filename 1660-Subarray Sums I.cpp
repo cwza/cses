@@ -6,7 +6,7 @@ typedef vector<vector<int>> vvi;
 typedef pair<int, int> pi;
 
 /*
-Sliding Window
+Exactly the same as 1661
 */
 
 int main() {
@@ -15,17 +15,15 @@ int main() {
 
     int n, x;
     cin >> n >> x;
-    vector<ll> arr(n);
-    for(int i = 0; i < n; ++i) cin >> arr[i];
-
-    ll l = 0, total = 0, ans = 0;
-    for(int r = 0; r < n; ++r) {
-        total += arr[r];
-        while(total > x) {
-            total -= arr[l];
-            l++;
-        }
-        if(total == x) ans++;
+    map<ll, int> counter; // {prefix_sum: freq}
+    counter[0] = 1;
+    ll curSum = 0, ans = 0;
+    for(int i = 0; i < n; ++i) {
+        ll a;
+        cin >> a;
+        curSum += a;
+        ans += counter[curSum-x];
+        counter[curSum]++;
     }
     cout << ans;
 }

@@ -1,10 +1,6 @@
-#include <algorithm>
 #include <bits/stdc++.h>
 using namespace std;
 typedef long long ll;
-typedef vector<int> vi;
-typedef vector<vector<int>> vvi;
-typedef pair<int, int> pi;
 
 /*
 Cycle Detection
@@ -13,30 +9,32 @@ Cycle Detection
 int n, m;
 const int maxN = 1e5;
 vector<int> adj[maxN+1]; // u: [v, ...]
-int visited[maxN+1]; // 0: init, 1: visiting, 2: visited
+bool visited[maxN+1], acting[maxN+1];
 int parent[maxN+1];
+vector<int> ans;
 
 void dfs(int u) {
+    visited[u] = true;
+    acting[u] = true;
     for(int v : adj[u]) {
-        if(visited[v]==0) {
-            visited[v] = 1;
-            parent[v] = u;
-            dfs(v);
-            visited[v] = 2;
-        } else if(visited[v]==1) {
-            vector<int> ans; ans.push_back(v);
+        if(acting[v]) {
             int cur = u;
+            ans.push_back(v);
             while(cur!=v) {
                 ans.push_back(cur);
                 cur = parent[cur];
             }
             ans.push_back(v);
-            reverse(ans.begin(), ans.end());
             cout << ans.size() << "\n";
-            for(int node : ans) cout << node << " ";
+            for(int i = ans.size()-1; i>=0; --i) cout << ans[i] << " ";
             exit(0);
+        } 
+        if(!visited[v]) {
+            parent[v] = u;
+            dfs(v);
         }
     }
+    acting[u] = false;
 }
 
 int main() {
@@ -51,10 +49,8 @@ int main() {
     }
 
     for(int u = 1; u <= n; ++u) {
-        if(visited[u]==0) {
-            visited[u] = 1;
+        if(!visited[u]) {
             dfs(u);
-            visited[u] = 2;
         }
     }
     cout << "IMPOSSIBLE";

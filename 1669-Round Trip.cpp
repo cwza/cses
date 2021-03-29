@@ -1,26 +1,24 @@
 #include <bits/stdc++.h>
 using namespace std;
 typedef long long ll;
-typedef vector<int> vi;
-typedef vector<vector<int>> vvi;
-typedef pair<int, int> pi;
+
+/*
+Cycle Detection on Undirected Graph
+*/
 
 const int maxN = 1e5;
-vi adj[maxN+1];
+vector<int> adj[maxN+1];
 int n, m;
-int parent[maxN+1], done[maxN+1];
-vi ans;
+int parent[maxN+1];
+bool visited[maxN+1];
+vector<int> ans;
 
-void dfs(int u) {
+void dfs(int u, int p) {
+    visited[u] = true;
+    parent[u] = p;
     for(int v : adj[u]) {
-        if(done[v]==2 || v==parent[u]) continue;
-        else if(done[v]==0) {
-            parent[v] = u;
-            done[v] = 1;
-            dfs(v);
-            done[v] = 2;
-        }
-        else if(done[v]==1) {
+        if(v==p) continue;
+        if(visited[v]) {
             int cur = u;
             ans.push_back(v);
             while(cur!=v) {
@@ -29,9 +27,11 @@ void dfs(int u) {
             }
             ans.push_back(v);
             cout << ans.size() << "\n";
-            for(int i = 0; i < ans.size(); ++i) 
-                cout << ans[i] << " ";
+            for(int i = ans.size()-1; i>=0; --i) cout << ans[i] << " ";
             exit(0);
+        } 
+        else {
+            dfs(v, u);
         }
     }
 }
@@ -49,10 +49,8 @@ int main() {
     }
 
     for(int i = 1; i <= n; ++i) {
-        if(done[i]==0) {
-            done[i] = 1;
-            dfs(i);
-            done[i] = 2;
+        if(!visited[i]) {
+            dfs(i, 0);
         }
     }
     cout << "IMPOSSIBLE";

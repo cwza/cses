@@ -6,6 +6,7 @@ typedef vector<vector<int>> vvi;
 typedef pair<int, int> pi;
 
 /*
+Binary Lifting
 Competitive Programmer's Handbook
 Ch16.3 Successor paths
 dp:

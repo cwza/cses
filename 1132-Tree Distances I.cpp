@@ -13,7 +13,7 @@ int n;
 const int maxN = 2e5;
 vector<int> adj[maxN];
 int d[maxN];
-int ans = 0;
+int ans[maxN];
 
 void dfs1(int u, int p) {
     for(int v : adj[u]) {
@@ -23,21 +23,23 @@ void dfs1(int u, int p) {
     }
 }
 
-void dfs2(int u, int p) {
-    vector<int> childD;
+void dfs2(int u, int p, int pd) {
+    ans[u] = max(d[u], pd);
+    vector<array<int, 2>> a{{pd, -1}};
+    for(int v: adj[u]) {
+        if(v == p) continue;
+        a.push_back({d[v]+1, v});
+    }
+    sort(a.begin(), a.end(), greater<array<int, 2>>());
     for(int v : adj[u]) {
         if(v == p) continue;
-        childD.push_back(d[v]);
-    }
-    sort(childD.begin(), childD.end(), greater<int>());
-    int tmp = 0;
-    for(int i = 0; i < 2 && i < childD.size(); ++i) {
-        tmp += childD[i] + 1;
-    }
-    ans = max(ans, tmp);
-    for(int v : adj[u]) {
-        if(v == p) continue;
-        dfs2(v, u);
+        if(a.size()==1) {
+            dfs2(v, u, a[0][0]+1);
+        }
+        else {
+            if(a[0][1] == v) dfs2(v, u, a[1][0]+1);
+            else dfs2(v, u, a[0][0]+1);
+        }
     }
 }
 
@@ -53,7 +55,7 @@ int main() {
     }
 
     dfs1(0, -1);
-    dfs2(0, -1);
+    dfs2(0, -1, 0);
 
-    cout << ans;
+    for(int i = 0; i < n; ++i) cout << ans[i] << " ";
 }

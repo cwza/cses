@@ -2,3 +2,4 @@
 .vscode
 *.dSYM
 a.out
+main.cpp

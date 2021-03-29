@@ -26,12 +26,12 @@ int main() {
     int n, x;
     cin >> n >> x;
     map<ll, int> counter; // {prefix_sum: freq}
+    counter[0] = 1;
     ll curSum = 0, ans = 0;
     for(int i = 0; i < n; ++i) {
         ll a;
         cin >> a;
         curSum += a;
-        if(curSum == x) ans++;
         ans += counter[curSum-x];
         counter[curSum]++;
     }
